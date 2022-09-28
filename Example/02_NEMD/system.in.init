@@ -1,0 +1,13 @@
+units           real
+atom_style      full
+bond_style      harmonic
+angle_style     cosine/squared
+dihedral_style  none
+improper_style  none
+pair_style      hybrid/overlay lj/gromacs 9 12 coul/long 12 	# inner outer (LJ), rcut (Coulombic)
+special_bonds   lj 0 1 1 coul 0 0 1			# turns off LJ/Coulombic interactions between bonded neighbors but not for 1-3 (off for Coulombic), 1-4 neighbors
+dielectric      2.5
+neigh_modify    every 1 delay 0 check yes #every 5
+boundary   	p p p
+
+kspace_style	pppm 1.0e-5

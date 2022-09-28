@@ -1,0 +1,92 @@
+# group definitions
+group Cgraphene type 4
+group CghostGraphene type 9
+group CgrapheneTop type 12
+group CghostGrapheneTop type 13
+group fattyAcid type 1 2 3 10 11
+group water     type 5 6
+group sodium	type 7
+
+pair_coeff * * coul/long
+
+# fatty acid pair coeff definitions (all triple checked)
+pair_coeff 1 1 lj/gromacs  0.8359606382000 4.7 	# C1-C1: IV
+pair_coeff 1 2 lj/gromacs  0.7404222795000 4.7 	# C1-C5: V
+pair_coeff 1 3 lj/gromacs  0.4776917933000 4.7 	# C1-P5: VIII
+pair_coeff 1 4 lj/gromacs  0.8359606382000 4.7 	# C1-C1: IV
+pair_coeff 2 2 lj/gromacs  0.8359606382000 4.7 	# C5-C5: IV
+pair_coeff 2 3 lj/gromacs  0.7404222795000 4.7 	# C5-P5: V
+pair_coeff 2 4 lj/gromacs  0.7404222795000 4.7 	# C5-C1: V
+pair_coeff 3 3 lj/gromacs  1.3375370210000 4.7 	# P5-P5: O
+pair_coeff 3 4 lj/gromacs  0.4776917933000 4.7 	# P5-C1: VIII
+pair_coeff 4 4 lj/gromacs  0.8359606382000 4.7 	# C1-C1: IV
+
+# pair coeffs for water interactions
+pair_coeff 5 5 lj/gromacs  0.9553835865000 4.7	# No coul between WP/WM in same molecule (see special bonds in .init file)
+
+pair_coeff 6 * lj/gromacs  0 4.7
+
+# interaction with central POL bead (LJ only)
+pair_coeff 1 5 lj/gromacs  0.4538072036000 4.7	# POL-C1: VIII effectively
+pair_coeff 2 5 lj/gromacs  0.7034011656000 4.7	# POL-C5: V effectively
+pair_coeff 3 5 lj/gromacs  1.2706601700000 4.7	# POL-P5: O effectively
+pair_coeff 4 5 lj/gromacs  0.4538072036000 4.7	# POL-C1: VIII effectively
+
+# interaction with central NAC bead (LJ only)
+pair_coeff 1 7 lj/gromacs  0.5493455622000 4.7	# Qd-C1: VII effectively
+pair_coeff 2 7 lj/gromacs  0.8359606382000 4.7	# Qd-C5: IV effectively
+pair_coeff 3 7 lj/gromacs  1.3375370210000 4.7	# Qd-P5: O effectively
+pair_coeff 4 7 lj/gromacs  0.5493455622000 4.7	# Qd-C1: VIII effectively
+
+# interaction between water (POL) and sodium ion (PQd) central beads
+pair_coeff 5 7 lj/gromacs  1.1942294830000 4.7	# POL-Qd: I effectively
+
+# pair coeffs for sodium ion interactions
+pair_coeff 7 7 lj/gromacs  0.8359606382000 4.7	# Qd-Qd: IV (Yesylevskyy)
+
+pair_coeff 8 * lj/gromacs  0 4.7
+pair_coeff 9 * lj/gromacs  0 4.7
+
+# interactions with FA tailgroup bead (C1)
+pair_coeff 1 10 lj/gromacs  0.8359606382000     4.7     # C1-C1: IV
+pair_coeff 2 10 lj/gromacs  0.7404222795000     4.7     # C1-C5: V
+pair_coeff 3 10 lj/gromacs  0.4776917933000     4.7     # P5-C1: VIII
+pair_coeff 4 10 lj/gromacs  0.8359606382000     4.7     # C1-C1: IV
+pair_coeff 5 10 lj/gromacs  0.4538072036000     4.7     # POL-C1: VIII effectively
+pair_coeff 7 10 lj/gromacs  0.5493455622000     4.7     # Qd-C1: VII effectively
+pair_coeff 10 10 lj/gromacs 0.8359606382000     4.7     # C1-C1: IV
+
+# interactions with charged Qa bead 
+pair_coeff 1 11 lj/gromacs  0.5493455622000	4.7 	# C1-Qa: VII effectively
+pair_coeff 2 11 lj/gromacs  0.8359606382000	4.7 	# C5-Qa: IV effectively
+pair_coeff 3 11 lj/gromacs  1.3375370210000	4.7 	# P5-Qa: O effectively
+pair_coeff 4 11 lj/gromacs  0.5493455622000	4.7 	# C1-Qa: VII effectively
+pair_coeff 5 11 lj/gromacs  1.1942294830000	4.7	# POL-Qa: I effectively
+pair_coeff 7 11 lj/gromacs  0.9553835865000	4.7	# Qd-Qa: III effectively
+pair_coeff 10 11 lj/gromacs 0.5493455622000	4.7 	# C1-Qa: VII effectively
+pair_coeff 11 11 lj/gromacs 0.8359606382000	4.7 	# Qa-Qa: IV effectively
+
+# top layer graphene bead
+pair_coeff 1 12 lj/gromacs  0.8359606382000 4.7    # C1-C1: IV
+pair_coeff 2 12 lj/gromacs  0.7404222795000 4.7    # C1-C5: V
+pair_coeff 3 12 lj/gromacs  0.4776917933000 4.7    # C1-P5: VIII
+pair_coeff 4 12 lj/gromacs  0.8359606382000 4.7    # C1-C1: IV
+pair_coeff 5 12 lj/gromacs  0.4538072036000 4.7    # POL-C1: VIII effectively
+pair_coeff 7 12 lj/gromacs  0.5493455622000 4.7    # Qd-C1: VII effectively
+pair_coeff 10 12 lj/gromacs 0.8359606382000 4.7     # C1-C1: IV
+pair_coeff 11 12 lj/gromacs 0.5493455622000 4.7     # C1-Qa: VII effectively
+pair_coeff 12 12 lj/gromacs 0.8359606382000 4.7    # C1-C1: IV
+
+# top layer ghost beads
+pair_coeff 13 * lj/gromacs  0 4.7
+
+# bond coeff definitions
+bond_coeff 1              1.4937858508604 4.7 	# checked
+bond_coeff 2              1000000000      1.4	# water beads (Kb has no meaning since SHAKE is used)
+bond_coeff 3              1000000000      1.4	# sodium beads (Kb has no meaning since SHAKE is used)
+bond_coeff 4              2.9875717017208 2.836	# graphene sheet
+
+# angle coeff definitions
+angle_coeff 1             2.9875717017208 180	# checked
+angle_coeff 2             0.5019126       0	# water beads
+angle_coeff 3             0.5019126       0	# sodium beads

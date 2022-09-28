@@ -1,0 +1,45 @@
+include         system.in.init
+
+# read data file
+read_data       hair_with_water.data
+
+# include settings
+include         system.in.settings
+
+# set output dump
+dump            dmpTraj all custom 100 traj_min.lammpstrj id mol type x y z ix iy iz
+
+# exclude ghost graphene bead interactions
+neigh_modify exclude type 4 9
+neigh_modify exclude type 12 13
+
+# print timestep
+thermo 1
+
+# freeze graphene and water beads
+fix freezeC1 Cgraphene setforce 0.0 0.0 0.0
+fix freezeC2 CghostGraphene setforce 0.0 0.0 0.0
+fix freezeC3 CgrapheneTop setforce 0.0 0.0 0.0
+fix freezeC4 CghostGrapheneTop setforce 0.0 0.0 0.0
+fix freezeW water setforce 0.0 0.0 0.0
+
+# minimize fatty acids
+minimize 0 1e-8 10000 10000
+unfix freezeW
+fix freezeFA fattyAcid setforce 0.0 0.0 0.0
+fix freezeS sodium setforce 0.0 0.0 0.0
+
+# minimize water
+minimize 0 1e-8 10000 10000
+unfix freezeFA
+unfix freezeS
+
+# minimize fatty acids and water
+minimize 0 1e-8 10000 10000
+
+# unfreeze and write
+unfix freezeC1
+unfix freezeC2
+unfix freezeC3
+unfix freezeC4
+write_data  	system_after_min.data

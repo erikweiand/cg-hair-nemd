@@ -1,0 +1,92 @@
+# ------------------------------- Initialization Section --------------------
+
+include         "system.in.init"
+
+# ------------------------------- Atom Definition Section -------------------
+
+read_data       "system_after_comp.data"
+#read_restart	"restart.*.slide"
+
+# ------------------------------- Settings Section --------------------------
+
+include         system.in.settings
+
+group           mobile subtract all Cgraphene CghostGraphene CgrapheneTop CghostGrapheneTop
+group		topGraphene union CgrapheneTop CghostGrapheneTop
+group		botGraphene union Cgraphene CghostGraphene
+
+# ----------------------------- Run Section -------------------------------
+
+# dump trajectories
+dump            1 all custom 100000 traj_slide.lammpstrj id mol type x y z ix iy iz vx vy vz
+
+# fix smooth walls
+fix zwalls all wall/reflect zlo 0 zhi 100
+
+# fix polarizable molecule bonds
+fix 1 water shake 0.0001 20 1000 b 2
+
+# exclude ghost graphene interactions
+neigh_modify exclude type 4 9
+neigh_modify exclude type 12 13
+
+velocity topGraphene zero angular
+velocity topGraphene zero linear
+run 0
+
+# thermostatting the first bead in the lipid chain (bond to ghost graphene)
+compute         temp_y thermoFA temp/partial 0 1 0
+fix             fxlng thermoFA langevin 298.15 298.15 100.0 699483 zero yes
+fix_modify      fxlng temp temp_y
+
+#1GPa = 0.14393 kcal mol-1 A-3, 1atm = 0.0000145837 kcal mol-1 A-3, kcal mol-1 A-3 x A2 = kcal mol-1 A-1
+variable        applied_press equal 100                                                    #pressure in bar
+variable        Sz       equal 119.112*103.154*4
+print            "Surface Area = ${Sz} A^2"
+variable        applied_force equal (${applied_press}*0.0000145837*${Sz})                       #in kcal mol-1 A-1 (/2 if applied to both surfaces)
+print            "Applied Force = ${applied_force} kcal mol^-1 A^-1"
+
+variable        z_force_top   equal (-${applied_force})/(count(topGraphene))
+print            "z_force_top = ${z_force_top} kcal mol-1 A-1"
+
+fix piston_top topGraphene setforce 0.0 0.0 NULL
+fix forceTop topGraphene aveforce NULL NULL v_z_force_top          # p=10MPa
+
+# Add shear to upper wall (wall_v in Ang/fs)
+variable        vel_top equal 1e-6	# 0.1 m/s
+velocity        topGraphene set ${vel_top} 0.0 0.0 units box
+
+fix fxlan1 topGraphene rigid single force * off off on torque * off off off langevin 0.0 0.0 1000000.0 24526
+
+# lower surface
+velocity 	botGraphene set 0 0 0
+fix freeze_bot 	botGraphene setforce 0.0 0.0 0.0
+
+# Output pressure and shear stress on the walls (from lammps/scripts)
+variable        s_top equal -f_piston_top[1]/0.000014393/${Sz}
+variable        p_top equal  f_forceTop[3]/0.000014393/${Sz}
+variable        s_bot equal  f_freeze_bot[1]/0.000014393/${Sz}
+variable        p_bot equal -f_freeze_bot[3]/0.000014393/${Sz}
+
+variable	Nshear	 equal 40000000
+variable 	Ndump_s  equal 100000
+variable        div_s    equal 20
+variable        ts_div_s equal 10000
+
+fix             fc_ave all ave/time 1 ${ts_div_s} ${ts_div_s} v_s_bot v_s_top v_p_bot v_p_top file fc_ave
+
+# integrate the equations of motion
+fix fxnve mobile nve
+
+compute tempMobile mobile temp
+compute pressMobile all pressure tempMobile
+
+thermo_style    custom step c_tempMobile pe etotal c_pressMobile vol epair #ebond eangle edihed
+thermo          100  # time interval for printing out "thermo" data
+
+restart		100000 restart.*.slide
+
+timestep        5.0
+run		${Nshear} upto
+
+write_data  	system_after_slide.data

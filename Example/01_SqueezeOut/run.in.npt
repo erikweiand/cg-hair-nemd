@@ -1,0 +1,57 @@
+# ------------------------------- Initialization Section --------------------
+
+include         "system.in.init"
+
+# ------------------------------- Atom Definition Section -------------------
+
+read_data       "system_after_nvt.data"
+#read_restart	"restart.*.npt"
+
+# ------------------------------- Settings Section --------------------------
+
+include         system.in.settings
+
+group           mobile subtract all CghostGraphene CghostGrapheneTop Cgraphene CgrapheneTop
+group	 	topGraphene union CgrapheneTop CghostGrapheneTop
+group	 	botGraphene union Cgraphene CghostGraphene
+
+# ----------------------------- Run Section -------------------------------
+
+# -- simulation protocol --
+
+print "--------- beginning simulation (using fix npt) ---------"
+
+dump            1 all custom 1000 traj_npt.lammpstrj id mol type x y z ix iy iz
+
+# fix polarizable molecule bonds
+fix 1 water shake 0.0001 20 1000 b 2
+
+# exclude ghost graphene interactions
+neigh_modify exclude type 4 9
+neigh_modify exclude type 4 4
+neigh_modify exclude type 9 9
+neigh_modify exclude type 12 13
+neigh_modify exclude type 12 12
+neigh_modify exclude type 13 13
+
+velocity topGraphene set 0 0 0
+velocity botGraphene set 0 0 0
+fix freeze1 topGraphene setforce 0 0 0
+fix freeze2 botGraphene setforce 0 0 0
+
+# Integrate the equations of motion:
+fix fxnpt mobile npt temp 298.15 298.15 1000.0 y 1.0 1.0 3000.0 z 1.0 1.0 3000.0 dilate mobile
+
+compute tempMobile mobile temp
+compute pressMobile all pressure tempMobile
+
+thermo_style    custom step c_tempMobile pe etotal c_pressMobile press vol epair
+thermo          100  # time interval for printing out "thermo" data
+
+restart		20000 restart.*.npt
+
+# brief NPT equilibration (manually terminate at reasonable box aspect ratio)
+timestep        5.0
+run		200000 upto
+
+write_data  	system_after_npt.data
