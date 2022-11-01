@@ -1,7 +1,9 @@
 # cg-hair-nemd
 Coarse-grained NEMD of hair friction phenomena.
 
-Work in progress - 22/09/28.
+Please consider citing our pre-print on bioRxiv<sup>[1]</sup> and Soft Matter hair surface paper<sup>[2]</sup> when using the material provided here.
+
+Work in progress - 11/01/28.
 
 Example: 25% hair damage (virgin hair) surface - squeeze-out and NEMD protocols available.
 
@@ -16,3 +18,8 @@ Example: 25% hair damage (virgin hair) surface - squeeze-out and NEMD protocols 
     2. Brief NVT equilibration (run.in.nvt)
     3. Compression at constant normal load (run.in.comp)
     4. NEMD (sliding) at v=0.1m/s (run.in.slide)
+
+## References
+[1] E. Weiand, J. P. Ewen, Y. Roiter, P. H. Koenig, S. H. Page, F. Rodriguez-Ropero, S. Angioletti-Uberti, D. Dini, Nanoscale Friction of Model Hair Surfaces, bioRxiv (2022), https://doi.org/10.1101/2022.09.29.510078.
+
+[2] E. Weiand, J. P. Ewen, P. H. Koenig, Y. Roiter, S. H. Page, S. Angioletti-Uberti, D. Dini, Coarse-grained molecular models of the surface of hair, Soft Matter 18 (2022), 1779-1792, https://doi.org/10.1039/D1SM01720A.
