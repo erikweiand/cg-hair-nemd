@@ -27,6 +27,14 @@ This repository contains relevant files for producing coarse-grained molecular d
 
 **Moltemplate:** Scripts for setting up the water bath (squeeze-out) and water at contact (NEMD) for own simulations at arbitrary system dimensions and water content.
 
+For making full use of this repository, the following tools should be accessible to the user:
+
+    LAMMPS (https://www.lammps.org/)
+    Moltemplate (https://www.moltemplate.org/)
+    packmol (https://m3g.github.io/packmol/)
+    A molecular visualization tool, such as VMD (https://www.ks.uiuc.edu/Research/vmd/)
+
+
 ## References
 [1] E. Weiand, J. P. Ewen, Y. Roiter, P. H. Koenig, S. H. Page, F. Rodriguez-Ropero, S. Angioletti-Uberti, D. Dini, Nanoscale Friction of Model Hair Surfaces, bioRxiv (2022), https://doi.org/10.1101/2022.09.29.510078.
 
