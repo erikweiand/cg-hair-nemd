@@ -1,0 +1,9 @@
+import "martini_water.lt"
+
+water = new MARTINIWATER[<yourNwaterMolecules>]
+
+write_once("Data Boundary") {
+  0 238.224 xlo xhi
+  0 206.308 ylo yhi
+  0 100 zlo zhi
+}

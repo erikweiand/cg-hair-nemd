@@ -1,0 +1,49 @@
+# file "martini_water.lt" 
+#
+# polarizable MARTINI water
+#
+#    H1     H2
+#      \   /
+#        O
+
+MARTINIWATER {
+
+  write_once("In Init") {
+    units        real
+    atom_style   full
+    pair_style   hybrid lj/gromacs/coul/gromacs 9 12 0.000001 12
+    bond_style   hybrid harmonic
+    angle_style  hybrid cosine/squared
+  }
+
+  write("Data Atoms") {
+    $atom:H2 $mol:. 6 -0.4600 -1.2000000 0.00000 0.000000
+    $atom:O  $mol:. 5  0.0000  0.0000000 0.00000 0.000000
+    $atom:H1 $mol:. 6  0.4600  1.2000000 0.00000 0.000000
+  }
+
+  write_once("Data Masses") {
+    @atom:O 24.0
+    @atom:H 24.0
+  }
+
+  write("Data Bonds") {
+    $bond:OH1 2 $atom:O $atom:H1
+    $bond:OH2 2 $atom:O $atom:H2
+  }
+
+  write("Data Angles") {
+    $angle:HOH 2 $atom:H1 $atom:O $atom:H2
+  }
+
+  write_once("In Settings") {
+    group water  type  @atom:O  @atom:H
+    pair_coeff   @atom:O @atom:O  lj/gromacs/coul/gromacs  0.956024 4.7
+    pair_coeff   @atom:O @atom:O  lj/gromacs/coul/gromacs  0.956024 4.7
+    pair_coeff   @atom:H @atom:H  lj/gromacs/coul/gromacs  0.956024 4.7
+    bond_coeff   @bond:OH         harmonic           	   100000   1.4
+    angle_coeff  @angle:HOH       cosine/squared           0.5019126  0
+  }
+
+} # end of definition of "martini_water" molecule type
+

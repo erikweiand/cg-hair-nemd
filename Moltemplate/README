@@ -1,0 +1,5 @@
+1) Replace <yourNwaterMolecules> by appropriate number of water molecules in "packWater.inp" and water_box.lt
+
+2) Pack randomly distributed water bath using Packmol: packmol < packWater.inp
+
+3) Create LAMMPS topology file using Moltemplate: moltemplate -xyz system.xyz -nocheck water_box.lt

@@ -1,0 +1,17 @@
+# Water bath for CG-MD squeeze-out simulations of hair surface contacts.
+# Run using packmol < packWater.inp
+# Packmol: https://m3g.github.io/packmol/
+
+tolerance  3.0      # minimum distance between molecules
+		    # (lower to 2.0 for faster convergence)
+seed       146	    # random seed
+filetype xyz	    # output file type
+
+# output file name
+output system.xyz
+
+# water bath with two pockets for hair surfaces
+structure water.xyz
+  number <yourNwaterMolecules>
+  inside box  1.0 1.0 30.0 237.224 205.308 45.0 # lower xyz, upper xyz
+end structure

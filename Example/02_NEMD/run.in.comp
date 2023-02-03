@@ -1,25 +1,18 @@
-# ------------------------------- Initialization Section --------------------
-
+# general settings
 include         "system.in.init"
 
-# ------------------------------- Atom Definition Section -------------------
-
+# read topology/restart files
 read_data       "system_after_nvt.data"
 #read_restart	"restart.*.npt"
 
-# ------------------------------- Settings Section --------------------------
-
+# read force field settings and groups
 include         system.in.settings
 
+# define additional groups
 group           mobile subtract all CghostGraphene CghostGrapheneTop Cgraphene #CgrapheneTop
 group		topGraphene type 12 13 
 
-# ----------------------------- Run Section -------------------------------
-
-# -- simulation protocol --
-
-print "--------- beginning simulation (using fix npt) ---------"
-
+# set up trajectory file
 dump            1 all custom 10000 traj_comp.lammpstrj id mol type x y z ix iy iz
 
 # fix smooth walls
@@ -37,9 +30,9 @@ neigh_modify exclude type 13 13
 neigh_modify exclude type 12 13
 
 # setting top graphene layer velocity to zero
-#velocity topGraphene zero angular
-#velocity topGraphene zero linear
-#run 0
+velocity topGraphene zero angular
+velocity topGraphene zero linear
+run 0
 
 # thermostatting the first bead in the lipid chain (bond to ghost graphene)
 fix fxlng thermoFA langevin 298.15 298.15 100.0 699483 zero yes
